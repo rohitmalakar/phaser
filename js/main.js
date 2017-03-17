@@ -25,15 +25,30 @@ var GameState = {
 		// this.manOne.events.onInputDown.add(this.animateMan, this);
 
 		// group for man
-		var manData = [
+		var menData = [
 			{key: 'manOne', text: "Man one"},
 			{key: 'manTwo', text: "Man Two"},
 			{key: 'manThree', text: "Man Three"}
 		];
 
-		manData.forEach(function() {
-				
+		this.men = this.game.add.group();
+
+		var self = this;
+
+		menData.forEach(function(element) {
+			man = self.men.create(-1000, self.game.world.centerY, element.key);
+
+			man.customParams = {text: element.text};
+			man.anchor.setTo(0.5);
+
+			man.inputEnabled = true;
+			// man.input.pixelPerfectClick = true;
+			man.input.useHandCursor = true;
+			man.events.onInputDown.add(self.animateMan, self);
 		});
+
+
+
 
 		// this.men = this.game.add.group();
 
@@ -54,7 +69,7 @@ var GameState = {
 
 		// left Arrow allow user input
 		this.leftArrow.inputEnabled = true;
-		this.leftArrow.input.pixelPerfectOver = true;
+		// this.leftArrow.input.pixelPerfectOver = true;
 	    //  Enable the hand cursor
 	    this.leftArrow.input.useHandCursor = true;
 		this.leftArrow.events.onInputDown.add(this.switchMan, this);
@@ -65,6 +80,11 @@ var GameState = {
 		this.arrowRight.scale.setTo(-0.08, 0.08);
 		this.arrowRight.anchor.setTo(0.5);
 		this.arrowRight.customParams = {direction: 1};
+
+		// right Arrow allow user input
+		this.arrowRight.inputEnabled = true;
+		this.arrowRight.input.useHandCursor = true;
+		this.arrowRight.events.onInputDown.add(this.switchMan, this);
 
 	},
 	update: function() {
