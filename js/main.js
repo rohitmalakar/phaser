@@ -4,9 +4,9 @@ var GameState = {
 	// load the game assets before the game starts
 	preload: function(){
 		this.load.image('background', 'assets/images/background.jpg');
-		this.load.image('manOne', 'assets/images/1.png');
-		this.load.image('manTwo', 'assets/images/2.png');
-		this.load.image('manThree', 'assets/images/3.png');
+		this.load.image('characterOne', 'assets/images/1.png');
+		this.load.image('characterTwo', 'assets/images/2.png');
+		this.load.image('characterThree', 'assets/images/3.png');
 		this.load.image('arrow', 'assets/images/arrow.png');
 	},
 	// executed after everything is loaded
@@ -25,28 +25,28 @@ var GameState = {
 		// this.manOne.events.onInputDown.add(this.animateMan, this);
 
 		// group for man
-		var menData = [
-			{key: 'manOne', text: "Man one"},
-			{key: 'manTwo', text: "Man Two"},
-			{key: 'manThree', text: "Man Three"}
+		var characterData = [
+			{key: 'characterOne', text: "Man one"},
+			{key: 'characterTwo', text: "Man Two"},
+			{key: 'characterThree', text: "Man Three"}
 		];
 
-		this.men = this.game.add.group();
+		this.characters = this.game.add.group();
 
 		var self = this;
 
-		menData.forEach(function(element) {
-			man = self.men.create(-1000, self.game.world.centerY, element.key);
+		characterData.forEach(function(element) {
+			character = self.characters.create(-1000, self.game.world.centerY, element.key);
 
-			man.customParams = {text: element.text};
-			man.anchor.setTo(0.5);
+			character.customParams = { text : element.text};
+			character.anchor.setTo(0.5);
 
-			man.inputEnabled = true;
-			// man.input.pixelPerfectClick = true;
-			man.input.useHandCursor = true;
-			man.events.onInputDown.add(self.animateMan, self);
+			character.inputEnabled = true;
+			character.input.pixelPerfectClick = true;
+			character.events.onInputDown.add(self.animateCharacter, self);
 		});
 
+		this.currentCharacter = this.characters.next();
 
 
 
@@ -72,7 +72,7 @@ var GameState = {
 		// this.leftArrow.input.pixelPerfectOver = true;
 	    //  Enable the hand cursor
 	    this.leftArrow.input.useHandCursor = true;
-		this.leftArrow.events.onInputDown.add(this.switchMan, this);
+		this.leftArrow.events.onInputDown.add(this.switchCharacter, this);
 		
 
 		// add right arrowRight
@@ -84,17 +84,41 @@ var GameState = {
 		// right Arrow allow user input
 		this.arrowRight.inputEnabled = true;
 		this.arrowRight.input.useHandCursor = true;
-		this.arrowRight.events.onInputDown.add(this.switchMan, this);
+		this.arrowRight.events.onInputDown.add(this.switchCharacter, this);
 
 	},
 	update: function() {
 
 	},
-	switchMan: function(sprite, event) {
-		console.log("move man");
+	switchCharacter: function(sprite, event) {
+
+		var newCharacter, endX;
+		// get the direction of the arrow
+		if(sprite.customParams.direction > 0){
+			newCharacter = this.characters.next();
+			endX = 640 + this.currentCharacter.width/2;
+		}
+		else{
+			newCharacter = this.characters.previous();
+			endX = -this.currentCharacter.width/2;
+			// endX = 100;
+		}
+
+		this.currentCharacter.x = endX;
+		newCharacter.x = this.game.world.centerX;
+		this.currentCharacter = newCharacter;
+
+		// get next character
+
+		// get final final destination of current character
+
+		// move current character to final destination
+
+		// set the next character as the new current character
+
 	},
-	animateMan: function(sprite, event) {
-		console.log('animate man');
+	animateCharacter: function(sprite, event) {
+		console.log('animate character');
 	}
 };
 
